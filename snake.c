@@ -167,11 +167,20 @@ int main(){
             // mvwprintw(win, 16, xMax - 30, "Max y: %d", yMax);
             // If the snake hits an edge end the game
             if(snakearr[length-1].xloc == xMax-1 || snakearr[length-1].yloc == yMax-1 || snakearr[length-1].xloc == 0 || snakearr[length-1].yloc == 0) {
-                mvwprintw(win, yMax/2, xMax/2, "For better or worse, you died!");
+                mvwprintw(win, yMax/2, xMax/2, "I hope you're better at driving than you are at the snake game.");
                 wrefresh(win);
                 usleep(3000000);
                 break;
             }
+
+            for(int i = 0; i < length; i++) {
+                if((snakearr[length-1].xloc)+1 == snakearr[i].xloc && (snakearr[length-1].yloc)+1 == snakearr[i].yloc) {
+                    mvwprintw(win, yMax/2, xMax/2, "Don't eat yourself; you probably don't taste very nice.");
+                    wrefresh(win);
+                    usleep(3000000);
+                    break;
+                }
+            }        
             // Win the game if the snake is half the available size
             if(length >= (xMax*yMax)/2){
                 mvwprintw(win, yMax/2, xMax/2, "Congrats! You've won the game!");
