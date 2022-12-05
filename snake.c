@@ -73,6 +73,15 @@ int main(){
         while(1){
             ch = wgetch(win);
             if(ch == KEY_UP) {
+
+                for(int i = 0; i < length; i++) {
+                if((snakearr[length-1].yloc)-1 == snakearr[i].yloc) {
+                    mvwprintw(win, yMax/2, xMax/2, "Don't eat yourself; you probably don't taste very nice.");
+                    wrefresh(win);
+                    usleep(3000000);
+                    break;
+                    }
+                }
                 if (dir == DOWN) {
                     mvwprintw(win, yMax/2, xMax/2, "For better or worse, you died!");
                     wrefresh(win);
@@ -82,6 +91,15 @@ int main(){
                 else dir = UP;
             }
             else if(ch == KEY_DOWN) {
+
+                for(int i = 0; i < length; i++) {
+                if((snakearr[length-1].yloc)+1 == snakearr[i].yloc) {
+                    mvwprintw(win, yMax/2, xMax/2, "Don't eat yourself; you probably don't taste very nice.");
+                    wrefresh(win);
+                    usleep(3000000);
+                    break;
+                    }
+                }               
                 if (dir == UP) {
                     mvwprintw(win, yMax/2, xMax/2, "For better or worse, you died!");
                     wrefresh(win);
@@ -91,6 +109,15 @@ int main(){
                 else dir = DOWN;
             }
             else if(ch == KEY_LEFT) {
+
+                for(int i = 0; i < length; i++) {
+                if((snakearr[length-1].xloc)-1 == snakearr[i].xloc) {
+                    mvwprintw(win, yMax/2, xMax/2, "Don't eat yourself; you probably don't taste very nice.");
+                    wrefresh(win);
+                    usleep(3000000);
+                    break;
+                    }
+                }
                 if (dir == RIGHT) {
                     mvwprintw(win, yMax/2, xMax/2, "For better or worse, you died!");
                     wrefresh(win);
@@ -100,6 +127,15 @@ int main(){
                 else dir = LEFT;
             }
             else if(ch == KEY_RIGHT) {
+
+                for(int i = 0; i < length; i++) {
+                if((snakearr[length-1].xloc)+1 == snakearr[i].xloc) {
+                    mvwprintw(win, yMax/2, xMax/2, "Don't eat yourself; you probably don't taste very nice.");
+                    wrefresh(win);
+                    usleep(3000000);
+                    break;
+                    }
+                }
                 if (dir == LEFT) {
                     mvwprintw(win, yMax/2, xMax/2, "For better or worse, you died!");
                     wrefresh(win);
@@ -173,14 +209,15 @@ int main(){
                 break;
             }
 
-            for(int i = 0; i < length; i++) {
+            // This is busted, but leave it here just in case
+            /*for(int i = 0; i < length; i++) {
                 if((snakearr[length-1].xloc)+1 == snakearr[i].xloc && (snakearr[length-1].yloc)+1 == snakearr[i].yloc) {
                     mvwprintw(win, yMax/2, xMax/2, "Don't eat yourself; you probably don't taste very nice.");
                     wrefresh(win);
                     usleep(3000000);
                     break;
                 }
-            }        
+            }        */
             // Win the game if the snake is half the available size
             if(length >= (xMax*yMax)/2){
                 mvwprintw(win, yMax/2, xMax/2, "Congrats! You've won the game!");
