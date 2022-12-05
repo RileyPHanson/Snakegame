@@ -172,6 +172,7 @@ int main(){
                 usleep(3000000);
                 break;
             }
+            // Win the game if the snake is half the available size
             if(length >= (xMax*yMax)/2){
                 mvwprintw(win, yMax/2, xMax/2, "Congrats! You've won the game!");
                 wrefresh(win);
