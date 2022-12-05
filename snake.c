@@ -128,7 +128,7 @@ int main(){
                 updateSnake(snakearr, length, dir);
             }
             //prints the snake
-            
+            printSnake(win, snakearr, length);
             // Checks if snake has no reached the trophy in given amount of time
             if (((snakearr[length-1].xloc != randX) || (snakearr[length-1].yloc != randY)) && (time(&end) - begin) >= trophy) {
                 mvwprintw(win, randY, randX, " ");
@@ -172,7 +172,12 @@ int main(){
                 usleep(3000000);
                 break;
             }
-            printSnake(win, snakearr, length);
+            if(length >= (xMax*yMax)/2){
+                mvwprintw(win, yMax/2, xMax/2, "Congrats! You've won the game!");
+                wrefresh(win);
+                usleep(3000000);
+                break;
+            }
             wrefresh(win);
             usleep(400000/length);  
         }      
