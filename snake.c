@@ -44,30 +44,30 @@ int main(){
         
         // Hide the cursor
         curs_set(0);
-        //Creates the window
+        // Creates the window
         WINDOW *win = newwin(yMax, xMax, 0,0);
-        // grabs key inputs
+        // Grabs key inputs
         keypad(win,true);
-        //turns of blocking
+        // Turns off blocking
         nodelay(win, TRUE);
-        //creates the pit
+        // Creates the pit
         box(win,0,0);
-        // Draw score
+        // Draws score
         mvwprintw(win, 0, xMax - 30, "Score: %d", score);
-        //creates the snake
+        // Creates the snake
         struct snake snakearr[(xMax*yMax)/2];
         initSnake(snakearr, length, dir, yMax, xMax, nextY, nextX);
         printSnake(win, snakearr, length);
-        // creates the trophy and timer
+        // Creates the trophy and timer
         time_t begin, end;
         time(&begin);
         randX = (rand()% (((COLS-1)-15)-10) +1)+10;
         randY = (rand()% (((LINES-1)-10)-5) +1)+5;
         int trophy = randomNum(1, 9);
-        //trophyTimer = (rand() % 9)+1;
+        trophyTimer = (rand() % 9)+1;
         mvwprintw(win,randY, randX, "%d", trophy);
         wrefresh(win);
-        //moves the snake by coping the snakes position from the snake struct in front of it unless it is the head of snake then that will move depending on the key that is pressed
+        // Moves the snake by coping the snakes position from the snake struct in front of it unless it is the head of snake then that will move depending on the key that is pressed
         while(1){
             ch = wgetch(win);
             if(ch == KEY_UP) {
@@ -126,7 +126,7 @@ int main(){
                 updateSnake(snakearr, length, dir);
             }
             char* nextpos = (char*) calloc(2, sizeof(char));
-            //prints the snake
+            // Prints the snake
             if (nextpos[0] == 'o'){
                 gameover = TRUE;
                 free(nextpos);
@@ -145,7 +145,7 @@ int main(){
                     randY = rand()% (LINES-1);
                 }
                 trophy = randomNum(1, 9);
-                //trophyTimer = (rand() % 9)+1;
+                trophyTimer = (rand() % 9)+1;
                 mvwprintw(win,randY, randX, "%d", trophy);
                 time(&begin);
             }
@@ -161,13 +161,18 @@ int main(){
                 randX = (rand()% (((COLS-1)-15)-10) +1)+10;
                 randY = (rand()% (((LINES-1)-5)-2) +1)+2;
                 trophy = randomNum(1, 9);
-                //trophyTimer = (rand() % 9)+1;
+                trophyTimer = (rand() % 9)+1;
                 mvwprintw(win,randY, randX, "%d", trophy);
                 time(&begin);
             }
             // If the snake hits an edge end the game
             if(snakearr[length-1].xloc == xMax-1 || snakearr[length-1].yloc == yMax-1 || snakearr[length-1].xloc == 0 || snakearr[length-1].yloc == 0) {
                 gameover = 1;
+            }
+            for(int i = 0; i < length-1; i++){
+                if(snakearr[length-1].xloc == snakearr[i].xloc && snakearr[length-1].yloc == snakearr[i].yloc){
+                gameover = 1;
+                }
             }
             if (gameover){
                 mvwprintw(win, yMax/2, xMax/2, "For better or worse, you died!");
@@ -184,7 +189,7 @@ int main(){
             }
             printSnake(win, snakearr, length);
             wrefresh(win);
-            usleep(100000);  
+            usleep(400000/length);  
         }      
     wrefresh(win);
     endwin();
