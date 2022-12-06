@@ -126,7 +126,7 @@ int main(){
                 updateSnake(snakearr, length, dir);
             }
             char* nextpos = (char*) calloc(2, sizeof(char));
-            // Prints the snake
+
             if (nextpos[0] == 'o'){
                 gameover = TRUE;
                 free(nextpos);
@@ -242,17 +242,16 @@ void updateSnake(struct snake arr[], int length, int dir){
         }
     }
 }
-
+// random num gen
 int randomNum(int min, int max){
    return min + (rand() % max);
 }
-
+// Printing the snake
 void printSnake(WINDOW *win, struct snake arr[], int length){
     for(int i=0; i <length; i++){
         mvwaddch(win,arr[i].yloc,arr[i].xloc,'o');
     }
 }
-
 void addSnake(struct snake snakearr[], int length, int dir){
     for (int i=0;i<length;i++){
         if (i == length-2){
