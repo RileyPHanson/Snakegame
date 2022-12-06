@@ -169,11 +169,11 @@ int main(){
             if(snakearr[length-1].xloc == xMax-1 || snakearr[length-1].yloc == yMax-1 || snakearr[length-1].xloc == 0 || snakearr[length-1].yloc == 0) {
                 gameover = 1;
             }
-            for(int i = 0; i < length-1; i++){
+            /*for(int i = 0; i < length-1; i++){
                 if(snakearr[length-1].xloc == snakearr[i].xloc && snakearr[length-1].yloc == snakearr[i].yloc){
                 gameover = 1;
                 }
-            }
+            } */
             if (gameover){
                 mvwprintw(win, yMax/2, xMax/2, "For better or worse, you died!");
                 wrefresh(win);
