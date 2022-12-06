@@ -23,7 +23,7 @@ void initSnake(struct snake[], int, int, int, int, int, int);
 
 int main(){
     int x, y, xMax, yMax, ch;
-    int length = 15;
+    int length = 3;
     int score = 0;
     int gameover = 0;
 
