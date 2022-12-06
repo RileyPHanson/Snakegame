@@ -42,7 +42,6 @@ int main(){
         time_t t;
         int nextX, nextY;
         
-
         // Hide the cursor
         curs_set(0);
         //Creates the window
@@ -289,7 +288,7 @@ void initSnake(struct snake snakearr[], int length, int dir, int yMax, int xMax,
                 if (i == length-1)
                     snakearr[i].head = 1;
                     nextX = snakearr[i].xloc;
-                    nextY = snakearr[i].yloc;
+                    nextY = snakearr[i].yloc - 1;
             }
     }
     if(dir == DOWN){
@@ -299,7 +298,7 @@ void initSnake(struct snake snakearr[], int length, int dir, int yMax, int xMax,
                 if (i == length-1)
                     snakearr[i].head = 1;
                     nextX = snakearr[i].xloc;
-                    nextY = snakearr[i].yloc;
+                    nextY = snakearr[i].yloc + 1;
             }
     }
     if(dir == LEFT){
@@ -308,7 +307,7 @@ void initSnake(struct snake snakearr[], int length, int dir, int yMax, int xMax,
                 snakearr[i].yloc=(yMax/2);
                 if (i == length-1)
                     snakearr[i].head = 1;
-                    nextX = snakearr[i].xloc;
+                    nextX = snakearr[i].xloc - 1;
                     nextY = snakearr[i].yloc;
             }
     }
@@ -318,7 +317,7 @@ void initSnake(struct snake snakearr[], int length, int dir, int yMax, int xMax,
                 snakearr[i].yloc=(yMax/2);
                 if (i == length-1)
                     snakearr[i].head = 1;
-                    nextX = snakearr[i].xloc;
+                    nextX = snakearr[i].xloc + 1;
                     nextY = snakearr[i].yloc;
             }
     }
