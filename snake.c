@@ -195,7 +195,7 @@ int main(){
     endwin();
 return 0;
 }
-
+//update snake direction
 void updateSnake(struct snake arr[], int length, int dir){
     if (dir == UP){
         for(int i = 0;i<length;i++){
