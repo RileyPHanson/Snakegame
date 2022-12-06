@@ -19,11 +19,13 @@ int randomNum(int, int);
 void updateSnake(struct snake[], int, int);
 void printSnake(WINDOW *win, struct snake[], int);
 void addSnake(struct snake[], int, int);
+void initSnake(struct snake[], int, int, int, int, int, int);
 
 int main(){
     int x, y, xMax, yMax, ch;
-    int length = 20;
+    int length = 15;
     int score = 0;
+    int gameover = 0;
 
     // Used for generating trophy location
     srand(time(0));
@@ -38,6 +40,8 @@ int main(){
         xMax = COLS-1;
         yMax = LINES-1;
         time_t t;
+        int nextX, nextY;
+        
 
         // Hide the cursor
         curs_set(0);
@@ -53,12 +57,7 @@ int main(){
         mvwprintw(win, 0, xMax - 30, "Score: %d", score);
         //creates the snake
         struct snake snakearr[(xMax*yMax)/2];
-        for(int i=0;i<length;i++){
-            snakearr[i].xloc=(i+1) + 50;
-            snakearr[i].yloc=yMax/2;
-            if (i == length-1)
-                snakearr[i].head = 1;
-        }
+        initSnake(snakearr, length, dir, yMax, xMax, nextY, nextX);
         printSnake(win, snakearr, length);
         // creates the trophy and timer
         time_t begin, end;
@@ -66,22 +65,13 @@ int main(){
         randX = (rand()% (((COLS-1)-15)-10) +1)+10;
         randY = (rand()% (((LINES-1)-10)-5) +1)+5;
         int trophy = randomNum(1, 9);
-        trophyTimer = (rand() % 9)+1;
+        //trophyTimer = (rand() % 9)+1;
         mvwprintw(win,randY, randX, "%d", trophy);
         wrefresh(win);
-        //moves the snake by copying the snakes position from the snake struct in front of it unless it is the head of snake then that will move depending on the key that is pressed
+        //moves the snake by coping the snakes position from the snake struct in front of it unless it is the head of snake then that will move depending on the key that is pressed
         while(1){
             ch = wgetch(win);
             if(ch == KEY_UP) {
-
-                for(int i = 0; i < length; i++) {
-                if(((snakearr[length-1].yloc)-1 == snakearr[i].yloc) && (snakearr[length-1].xloc) == snakearr[i].xloc) {
-                    mvwprintw(win, yMax/2, xMax/2, "Don't eat yourself; you probably don't taste very nice.");
-                    wrefresh(win);
-                    usleep(3000000);
-                    break;
-                    }
-                }
                 if (dir == DOWN) {
                     mvwprintw(win, yMax/2, xMax/2, "For better or worse, you died!");
                     wrefresh(win);
@@ -91,15 +81,6 @@ int main(){
                 else dir = UP;
             }
             else if(ch == KEY_DOWN) {
-
-                for(int i = 0; i < length; i++) {
-                if(((snakearr[length-1].yloc)+1 == snakearr[i].yloc) && (snakearr[length-1].xloc) == snakearr[i].xloc) {
-                    mvwprintw(win, yMax/2, xMax/2, "Don't eat yourself; you probably don't taste very nice.");
-                    wrefresh(win);
-                    usleep(3000000);
-                    break;
-                    }
-                }               
                 if (dir == UP) {
                     mvwprintw(win, yMax/2, xMax/2, "For better or worse, you died!");
                     wrefresh(win);
@@ -109,15 +90,6 @@ int main(){
                 else dir = DOWN;
             }
             else if(ch == KEY_LEFT) {
-
-                for(int i = 0; i < length; i++) {
-                if(((snakearr[length-1].xloc)-1 == snakearr[i].xloc) && (snakearr[length-1].yloc) == snakearr[i].yloc) {
-                    mvwprintw(win, yMax/2, xMax/2, "Don't eat yourself; you probably don't taste very nice.");
-                    wrefresh(win);
-                    usleep(3000000);
-                    break;
-                    }
-                }
                 if (dir == RIGHT) {
                     mvwprintw(win, yMax/2, xMax/2, "For better or worse, you died!");
                     wrefresh(win);
@@ -127,15 +99,6 @@ int main(){
                 else dir = LEFT;
             }
             else if(ch == KEY_RIGHT) {
-
-                for(int i = 0; i < length; i++) {
-                if(((snakearr[length-1].xloc)+1 == snakearr[i].xloc) && (snakearr[length-1].yloc) == snakearr[i].yloc) {
-                    mvwprintw(win, yMax/2, xMax/2, "Don't eat yourself; you probably don't taste very nice.");
-                    wrefresh(win);
-                    usleep(3000000);
-                    break;
-                    }
-                }
                 if (dir == LEFT) {
                     mvwprintw(win, yMax/2, xMax/2, "For better or worse, you died!");
                     wrefresh(win);
@@ -163,9 +126,15 @@ int main(){
             if (dir==RIGHT){
                 updateSnake(snakearr, length, dir);
             }
+            char* nextpos = (char*) calloc(2, sizeof(char));
             //prints the snake
-            printSnake(win, snakearr, length);
-            //checks if snake has not reached the trophy in given amount of time
+            if (nextpos[0] == 'o'){
+                gameover = TRUE;
+                free(nextpos);
+                break;
+            }
+            free(nextpos);
+            // Checks if snake has no reached the trophy in given amount of time
             if (((snakearr[length-1].xloc != randX) || (snakearr[length-1].yloc != randY)) && (time(&end) - begin) >= trophy) {
                 mvwprintw(win, randY, randX, " ");
                 randX = (rand()% (((COLS-1)-15)-10) +1)+10;
@@ -177,7 +146,7 @@ int main(){
                     randY = rand()% (LINES-1);
                 }
                 trophy = randomNum(1, 9);
-                trophyTimer = (rand() % 9)+1;
+                //trophyTimer = (rand() % 9)+1;
                 mvwprintw(win,randY, randX, "%d", trophy);
                 time(&begin);
             }
@@ -193,43 +162,28 @@ int main(){
                 randX = (rand()% (((COLS-1)-15)-10) +1)+10;
                 randY = (rand()% (((LINES-1)-5)-2) +1)+2;
                 trophy = randomNum(1, 9);
-                trophyTimer = (rand() % 9)+1;
+                //trophyTimer = (rand() % 9)+1;
                 mvwprintw(win,randY, randX, "%d", trophy);
                 time(&begin);
             }
-            // mvwprintw(win, 10, xMax - 30, "Random X: %d", randX);
-            // mvwprintw(win, 11, xMax - 30, "Max X: %d", xMax);
-            // mvwprintw(win, 15, xMax - 30, "Random y: %d", randY);
-            // mvwprintw(win, 16, xMax - 30, "Max y: %d", yMax);
-            mvwprintw(win, 16, xMax-30, "head x: %d", snakearr[length-1].xloc);
-            mvwprintw(win, 18, xMax-30, "head y: %d", snakearr[length-1].yloc);
-
             // If the snake hits an edge end the game
-            if(snakearr[length-1].xloc == xMax-1 || snakearr[length-1].yloc == yMax-1 || snakearr[length-1].xloc == 0 || snakearr[length-1].yloc == 0) {
-                mvwprintw(win, yMax/2, xMax/2, "I hope you're better at driving than you are at the snake game.");
-                wrefresh(win);
-                usleep(3000000);
-                break;
+            if(snakearr[length-1].xloc == xMax || snakearr[length-1].yloc == yMax || snakearr[length-1].xloc == 0 || snakearr[length-1].yloc == 0) {
+                gameover = 1;
             }
-
-            // This is busted, but leave it here just in case
-            /*for(int i = 0; i < length; i++) {
-                if((snakearr[length-1].xloc)+1 == snakearr[i].xloc && (snakearr[length-1].yloc)+1 == snakearr[i].yloc) {
-                    mvwprintw(win, yMax/2, xMax/2, "Don't eat yourself; you probably don't taste very nice.");
-                    wrefresh(win);
-                    usleep(3000000);
-                    break;
+            for(int i = 0; i < length-1; i++){
+                if(snakearr[length-1].xloc == snakearr[i].xloc && snakearr[length-1].yloc == snakearr[i].yloc){
+                gameover = 1;
                 }
-            }        */
-            // Win the game if the snake is half the available size
-            if(length >= (COLS-1)/2){ // changed from (xMax*yMax)/2)
-                mvwprintw(win, yMax/2, xMax/2, "Congrats! You've won the game!");
+            }
+            if (gameover){
+                mvwprintw(win, yMax/2, xMax/2, "For better or worse, you died!");
                 wrefresh(win);
                 usleep(3000000);
                 break;
             }
+            printSnake(win, snakearr, length);
             wrefresh(win);
-            usleep(300000); //(400000/length);  
+            usleep(100000);  
         }      
     wrefresh(win);
     endwin();
@@ -289,8 +243,8 @@ int randomNum(int min, int max){
 
 void printSnake(WINDOW *win, struct snake arr[], int length){
     for(int i=0; i <length; i++){
-                mvwaddch(win,arr[i].yloc,arr[i].xloc,'o');
-            }
+        mvwaddch(win,arr[i].yloc,arr[i].xloc,'o');
+    }
 }
 
 void addSnake(struct snake snakearr[], int length, int dir){
@@ -317,5 +271,48 @@ void addSnake(struct snake snakearr[], int length, int dir){
                 snakearr[i].yloc = snakearr[i-1].yloc;
             }
         }
+    }
+}
+
+void initSnake(struct snake snakearr[], int length, int dir, int yMax, int xMax, int nextY, int nextX){
+    if(dir == UP){
+        for(int i=0;i<length;i++){
+                snakearr[i].xloc=(xMax/2);
+                snakearr[i].yloc=(yMax/2)-i;
+                if (i == length-1)
+                    snakearr[i].head = 1;
+                    nextX = snakearr[i].xloc;
+                    nextY = snakearr[i].yloc;
+            }
+    }
+    if(dir == DOWN){
+        for(int i=0;i<length;i++){
+                snakearr[i].xloc=(xMax/2);
+                snakearr[i].yloc=(yMax/2)+i;
+                if (i == length-1)
+                    snakearr[i].head = 1;
+                    nextX = snakearr[i].xloc;
+                    nextY = snakearr[i].yloc;
+            }
+    }
+    if(dir == LEFT){
+        for(int i=0;i<length;i++){
+                snakearr[i].xloc=(xMax/2)-i;
+                snakearr[i].yloc=(yMax/2);
+                if (i == length-1)
+                    snakearr[i].head = 1;
+                    nextX = snakearr[i].xloc;
+                    nextY = snakearr[i].yloc;
+            }
+    }
+    if(dir == RIGHT){
+        for(int i=0;i<length;i++){
+                snakearr[i].xloc=(xMax/2)+i;
+                snakearr[i].yloc=(yMax/2);
+                if (i == length-1)
+                    snakearr[i].head = 1;
+                    nextX = snakearr[i].xloc;
+                    nextY = snakearr[i].yloc;
+            }
     }
 }
