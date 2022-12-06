@@ -167,7 +167,7 @@ int main(){
                 time(&begin);
             }
             // If the snake hits an edge end the game
-            if(snakearr[length-1].xloc == xMax || snakearr[length-1].yloc == yMax || snakearr[length-1].xloc == 0 || snakearr[length-1].yloc == 0) {
+            if(snakearr[length-1].xloc == xMax-1 || snakearr[length-1].yloc == yMax-1 || snakearr[length-1].xloc == 0 || snakearr[length-1].yloc == 0) {
                 gameover = 1;
             }
             for(int i = 0; i < length-1; i++){
